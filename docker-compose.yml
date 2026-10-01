@@ -1,0 +1,17 @@
+services:
+  face-worker:
+    build: .
+    image: bwayprodsnap-face-worker
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Dejar vacío = sin auth. Recomendado: poné una clave y la misma en config.js (FACE_WORKER_KEY).
+      FACE_WORKER_KEY: "${FACE_WORKER_KEY:-}"
+      # Orígenes permitidos (CORS). Ajustar a tus dominios.
+      FACE_WORKER_ORIGINS: "https://bwayprod.vip,https://www.bwayprod.vip,https://bwayprodx.pages.dev,http://localhost:8000"
+    # Facenet512 + RetinaFace en CPU usan ~1.5–2 GB. Subí el límite si hace falta.
+    deploy:
+      resources:
+        limits:
+          memory: 3g
